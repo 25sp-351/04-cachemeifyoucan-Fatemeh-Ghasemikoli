@@ -1,0 +1,25 @@
+#include "input.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int read_input(const char* filename, Piece pieces[], int *count)  // Read pieces from a file
+{
+    FILE* fp = fopen(filename, "r");
+    if (!fp) {
+        fprintf(stderr, "Error: Could not open file '%s'\n", filename);
+        // Return 1 to indicate failure to open file
+        return 1;  
+    }
+
+    *count = 0;
+    while (fscanf(fp, "%d %d %d", &pieces[*count].length, &pieces[*count].price, &pieces[*count].max_usage) == 3) {
+        (*count)++;
+        if (*count >= MAX_PIECES) {
+            fprintf(stderr, "Warning: Reached MAX_PIECES (%d)\n", MAX_PIECES);
+            break;
+        }
+    }
+
+    fclose(fp);
+    return 0; 
+}
